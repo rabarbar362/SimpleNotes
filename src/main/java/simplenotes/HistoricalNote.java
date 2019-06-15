@@ -4,11 +4,10 @@ import org.springframework.lang.NonNull;
 
 import javax.persistence.*;
 import java.util.Date;
-import java.util.Set;
 
 @Entity
-@Table (name = "note")
-public class Note {
+@Table (name = "historical_note")
+public class HistoricalNote {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,9 +19,9 @@ public class Note {
     private Date creationDate;
     private Date modificationDate;
 
-    @OneToMany (cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "id")
-    private Set<HistoricalNote> historicalNoteSet;
-
+    @ManyToOne (fetch = FetchType.LAZY)
+    @JoinColumn (name = "note_id", nullable = false)
+    private Note note;
 
     public Integer getId() {
         return id;
@@ -56,13 +55,6 @@ public class Note {
         this.creationDate = creationDate;
     }
 
-    public void setNote(Note note) {
-    }
-
-    public Note getNote() {
-        return null;
-    }
-
     public Date getModificationDate() {
         return modificationDate;
     }
@@ -71,11 +63,11 @@ public class Note {
         this.modificationDate = modificationDate;
     }
 
-    public Set<HistoricalNote> getHistoricalNoteSet() {
-        return historicalNoteSet;
+    public Note getNote() {
+        return note;
     }
 
-    public void setHistoricalNoteSet(Set<HistoricalNote> historicalNoteSet) {
-        this.historicalNoteSet = historicalNoteSet;
+    public void setNote(Note note) {
+        this.note = note;
     }
 }
