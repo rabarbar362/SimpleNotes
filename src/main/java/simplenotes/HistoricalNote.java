@@ -1,5 +1,7 @@
 package simplenotes;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.springframework.lang.NonNull;
 
 import javax.persistence.*;
@@ -18,6 +20,7 @@ public class HistoricalNote {
     private String content;
     private Date creationDate;
     private Date modificationDate;
+    private Integer versionNumber;
 
     @ManyToOne (fetch = FetchType.LAZY)
     @JoinColumn (name = "note_id", nullable = false)
@@ -63,11 +66,20 @@ public class HistoricalNote {
         this.modificationDate = modificationDate;
     }
 
+    @JsonBackReference
     public Note getNote() {
         return note;
     }
 
     public void setNote(Note note) {
         this.note = note;
+    }
+
+    public Integer getVersionNumber() {
+        return versionNumber;
+    }
+
+    public void setVersionNumber(Integer versionNumber) {
+        this.versionNumber = versionNumber;
     }
 }

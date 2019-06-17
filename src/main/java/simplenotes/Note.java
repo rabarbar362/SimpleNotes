@@ -1,9 +1,12 @@
 package simplenotes;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.springframework.lang.NonNull;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -20,8 +23,8 @@ public class Note {
     private Date creationDate;
     private Date modificationDate;
 
-    @OneToMany (cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "id")
-    private Set<HistoricalNote> historicalNoteSet;
+    @OneToMany (cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "note")
+    private Set<HistoricalNote> historicalNoteSet = new HashSet<>();
 
 
     public Integer getId() {
@@ -71,6 +74,8 @@ public class Note {
         this.modificationDate = modificationDate;
     }
 
+    @JsonManagedReference
+    @JsonIgnore
     public Set<HistoricalNote> getHistoricalNoteSet() {
         return historicalNoteSet;
     }
