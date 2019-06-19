@@ -29,11 +29,11 @@ spring.datasource.password=
 ````
 provide your login and password to MariaDB
 
-3. Also in the *application.properties* file and make sure that the 5th line is:
+3. Also in the *application.properties* file make sure that the 5th line is:
 ````
 spring.jpa.hibernate.ddl-auto=create
 ````
-4. Build+run the project
+4. Build + run the project
 5. In the *application.properties* file change line
 ````
 spring.jpa.hibernate.ddl-auto=create
