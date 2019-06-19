@@ -1,6 +1,8 @@
 package simplenotes;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
@@ -21,58 +23,64 @@ public class NotesResource {
     }
 
     @GetMapping(path = "/all")
-    public @ResponseBody
-    Iterable<Note> getAllNotes() {
+    public Iterable<Note> getAllNotes() {
+
         return notesRepository.findAll();
     }
 
     @GetMapping(path="/history")
-    public @ResponseBody
-    Set<HistoricalNote> getHistory(@RequestParam int id) {
-        Optional<Note> note = notesRepository.findById(id);
-        if (note.isPresent()) {
-            return note.get().getHistoricalNoteSet();
+    public ResponseEntity<Set<HistoricalNote>> getHistory(@RequestParam int id) {
+        Optional<Note> optionalNote = notesRepository.findById(id);
+
+        if (optionalNote.isPresent()) {
+            return new ResponseEntity<>(optionalNote.get().getHistoricalNoteSet(), HttpStatus.OK);
         } else {
-            return null;
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
     @GetMapping(path = "/getnote")
-    public @ResponseBody
-    Optional<Note> getOneNote(@RequestParam int id) {
-        Optional<Note> note = notesRepository.findById(id);
-        if (note.isPresent()) {
-            return note;
+    public ResponseEntity<Note> getOneNote(@RequestParam int id) {
+
+        Optional<Note> optionalNote = notesRepository.findById(id);
+
+        if (optionalNote.isPresent()) {
+            return new ResponseEntity<>(optionalNote.get(), HttpStatus.OK);
         } else {
-            return null;
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
     @PostMapping(path = "/add")
-    public @ResponseBody
-    String addNewNote(@ModelAttribute Note note) {
-        //TODO: add validation
-        note.setCreationDate(new Date());
-        notesRepository.save(note);
+    public ResponseEntity<Note> addNewNote(@ModelAttribute Note note) {
 
-        HistoricalNote archivedNote = new HistoricalNote();
+        if (note.getContent() != null && note.getTitle() != null) {
+            note.setCreationDate(new Date());
+            note.setModificationDate(new Date());
+            notesRepository.save(note);
 
-        archivedNote.setNote(note);
-        archivedNote.setTitle(note.getTitle());
-        archivedNote.setContent(note.getContent());
-        archivedNote.setCreationDate(note.getCreationDate());
-        archivedNote.setVersionNumber(0);
-        historicalNotesRepository.save(archivedNote);
+            HistoricalNote archivedNote = new HistoricalNote();
 
-        return "Note " + note.getTitle() + "\n" + note.getContent() + "\nsaved! " + note.getCreationDate();
+            archivedNote.setNote(note);
+            archivedNote.setTitle(note.getTitle());
+            archivedNote.setContent(note.getContent());
+            archivedNote.setCreationDate(note.getCreationDate());
+            archivedNote.setModificationDate(note.getModificationDate());
+            archivedNote.setVersionNumber(0);
+            historicalNotesRepository.save(archivedNote);
+
+            return new ResponseEntity<>(note, HttpStatus.CREATED);
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
     }
 
     @PutMapping(path = "/modify")
-    public @ResponseBody
-    String modifyNote(@ModelAttribute Note note, @RequestParam int id) {
+    public ResponseEntity<Note> modifyNote(@ModelAttribute Note note, @RequestParam int id) {
         Optional<Note> optionalNote = notesRepository.findById(id);
         if (!optionalNote.isPresent()) {
-            return "there is no such note";
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } else {
 
             note.setModificationDate(new Date());
@@ -95,29 +103,25 @@ public class NotesResource {
 
             historicalNotesRepository.save(archivedNote);
 
-            return "note changed";
+            return new ResponseEntity<>(note,HttpStatus.NO_CONTENT);
         }
 
     }
 
     @DeleteMapping(path = "/delete")
-    public @ResponseBody
-    String deleteNote(@RequestParam int id) {
+    public ResponseEntity<Note> deleteNote(@RequestParam int id) {
         Optional<Note> note = notesRepository.findById(id);
 
         if (note.isPresent()) {
-            notesRepository.deleteById(id);
-            return "Note with id " + id + " deleted.";
+            note.get().setContent("");
+            note.get().setTitle("");
+            note.get().setCreationDate(null);
+            note.get().setModificationDate(null);
+            notesRepository.save(note.get());
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else {
-            return "There is no note with id " + id;
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-    }
-
-    @DeleteMapping(path = "/deleteall")
-    public @ResponseBody
-    String deleteAll() {
-       notesRepository.deleteAll();
-       return "deleted";
     }
 }
 
