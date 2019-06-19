@@ -55,11 +55,11 @@ GET http://localhost:8080/getnote?id={id}
 GET http://localhost:8080/history?id={id}
 
 4. Add new note\
-POST http://localhost:8080/add
+POST http://localhost:8080/add \
 select the Body tab in Postman and add keys: "title" and "content" and provide values
 
 5. Modify existing note\
-PUT http://localhost:8080/modify?id={id}
+PUT http://localhost:8080/modify?id={id} \
 select the Body tab in Postman and add keys: "title" and "content" and provide new values
 
 6. Remove note\
