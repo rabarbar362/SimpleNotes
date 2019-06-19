@@ -1,6 +1,6 @@
 # Simple Notes
 
-RESTful API webservice that will be responsible for managing and storing in database simple notes (without the UI part).
+RESTful API webservice that is responsible for managing and storing simple notes in database (without the UI part).
 
 
 
