@@ -26,6 +26,16 @@ public class HistoricalNote {
     @JoinColumn (name = "note_id", nullable = false)
     private Note note;
 
+    public HistoricalNote() {}
+
+    public HistoricalNote(String title, String content, Date creationDate, Date modificationDate, Integer versionNumber) {
+        this.title = title;
+        this.content = content;
+        this.creationDate = creationDate;
+        this.modificationDate = modificationDate;
+        this.versionNumber = versionNumber;
+    }
+
     public Integer getId() {
         return id;
     }

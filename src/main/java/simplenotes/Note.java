@@ -26,6 +26,14 @@ public class Note {
     @OneToMany (cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "note")
     private Set<HistoricalNote> historicalNoteSet = new HashSet<>();
 
+    public Note() {}
+
+    public Note(String title, String content, Date creationDate, Date modificationDate) {
+        this.title = title;
+        this.content = content;
+        this.creationDate = creationDate;
+        this.modificationDate = modificationDate;
+    }
 
     public Integer getId() {
         return id;

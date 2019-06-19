@@ -59,14 +59,11 @@ public class NotesResource {
             note.setModificationDate(new Date());
             notesRepository.save(note);
 
-            HistoricalNote archivedNote = new HistoricalNote();
+            HistoricalNote archivedNote = new HistoricalNote(
+                    note.getTitle(),note.getContent(),note.getCreationDate(),
+                    note.getModificationDate(), 0);
 
             archivedNote.setNote(note);
-            archivedNote.setTitle(note.getTitle());
-            archivedNote.setContent(note.getContent());
-            archivedNote.setCreationDate(note.getCreationDate());
-            archivedNote.setModificationDate(note.getModificationDate());
-            archivedNote.setVersionNumber(0);
             historicalNotesRepository.save(archivedNote);
 
             return new ResponseEntity<>(note, HttpStatus.CREATED);
@@ -88,12 +85,10 @@ public class NotesResource {
             notesRepository.save(note);
 
             Set<HistoricalNote> historicalNoteSet = optionalNote.get().getHistoricalNoteSet();
-            HistoricalNote archivedNote = new HistoricalNote();
+            HistoricalNote archivedNote = new HistoricalNote(
+                    note.getTitle(),note.getContent(),note.getCreationDate(),
+                    note.getModificationDate(), null);
             archivedNote.setNote(note);
-            archivedNote.setTitle(note.getTitle());
-            archivedNote.setContent(note.getContent());
-            archivedNote.setCreationDate(note.getCreationDate());
-            archivedNote.setModificationDate(note.getModificationDate());
 
             if (historicalNoteSet == null) {
                 archivedNote.setVersionNumber(1);
