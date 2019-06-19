@@ -5,8 +5,8 @@ RESTful API webservice that will be responsible for managing and storing in data
 
 
 ## what you need to run the project
-MariaDB with user/root account with granted privileges
-Intellij IDEA with Gradle
+MariaDB with user/root account with granted privileges\
+Intellij IDEA with Gradle\
 Postman
 
 ### database
