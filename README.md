@@ -11,13 +11,13 @@ Postman
 
 ### database
 
-1. Start MariaDB process
+1. Start MariaDB process\
 `$ sudo systemctl start mariadb`
-2. Login
+2. Login\
 `$ mysql -u root`
-3. Create database *simplenotes*
+3. Create database *simplenotes*\
 `CREATE DATABASE simplenotes;`
-4. Use the database
+4. Use the database\
 `USE simplenotes;`
 
 ### project
@@ -45,24 +45,24 @@ spring.jpa.hibernate.ddl-auto=update
 
 ## example usages (in Postman)
 
-1. Get all notes
+1. Get all notes\
 GET http://localhost:8080/all
 
-2. Get one particular note
+2. Get one particular note\
 GET http://localhost:8080/getnote?id={id}
 
-3. Get version history of particular note
+3. Get version history of particular note\
 GET http://localhost:8080/history?id={id}
 
-4. Add new note
+4. Add new note\
 POST http://localhost:8080/add
 select the Body tab in Postman and add keys: "title" and "content" and provide values
 
-5. Modify existing note
+5. Modify existing note\
 PUT http://localhost:8080/modify?id={id}
 select the Body tab in Postman and add keys: "title" and "content" and provide new values
 
-6. Remove note
+6. Remove note\
 DELETE http://localhost:8080/delete?id={id}
 
 
